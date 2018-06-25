@@ -5,7 +5,7 @@ Barebones CMS is a free and open source content management system.  There are th
 
 There are three major components to the release distribution:  The Barebones CMS API, the Barebones CMS SDK, and the Barebones CMS administrative interface.
 
-(overview video)
+[![Barebones CMS Architecture Overview video](https://user-images.githubusercontent.com/1432111/41880502-399f51f8-7893-11e8-907d-18519c23c23c.png)](https://www.youtube.com/watch?v=uybGZ0V-tYY "Barebones CMS Architecture Overview")
 
 Barebones CMS API
 -----------------
