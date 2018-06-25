@@ -1,25 +1,12 @@
-Barebones CMS Release Distribution
-==================================
+Barebones CMS Documentation
+===========================
 
-Barebones CMS pushes the limits of content management and solves many of today's problems with delivering content to the browser that were previously unsolved.  Let Barebones CMS power your next website.  You'll be glad you did.
-
-[Try the demo](http://barebonescms.com/demo/)
-
-![Screenshot of the Barebones CMS administrative interface](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/images/admin_interface_screenshot.png?raw=true "Barebones CMS administrative interface")
-
-[![Donate](https://cubiclesoft.com/res/donate-shield.png)](https://cubiclesoft.com/donate/)
+This directory contains the release distribution documentation for Barebones CMS.
 
 Features
 --------
 
-* [API-driven architecture](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/docs/api.md).
-* [Uniquely immersive content editor](demo video).
-* Beautiful and elegant fully-responsive user interface for any device.
-* Extensive and flexible multilingual support.
-* A great revision system.
-* Comprehensive plugin support.
-* Never lose control of your content.  Your content is yours.
-* Integrates with the [/feeds extension](https://github.com/cubiclesoft/cloud-storage-server-ext-feeds) of [Cloud Storage Server](https://github.com/cubiclesoft/cloud-storage-server) for realtime time-based content change notifications (e.g. the moment content reaches publish time).
+* All the documentation for Barebones CMS in one place.
 * Has a liberal open source license.  MIT or LGPL, your choice.
 * Designed for relatively painless integration into your project.
 * Sits on GitHub for all of that pull request and issue tracker goodness to easily submit changes and ideas respectively.

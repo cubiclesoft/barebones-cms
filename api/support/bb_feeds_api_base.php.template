@@ -1,0 +1,103 @@
+<?php
+	// Barebones CMS API future calculation class for /feeds API integration.
+	// (C) 2017 CubicleSoft.  All Rights Reserved.
+
+	class CSS_Extension_feeds__@NAME@
+	{
+		private $db, $api_db_assets;
+
+		public function Init()
+		{
+			$config = @CONFIG@;
+
+			$dbclassname = "CSDB_" . $config["db_select"];
+
+			if (!class_exists($dbclassname, false))  require_once $config["rootpath"] . "/support/csdb/db_" . $config["db_select"] . ".php";
+
+			if ($config["db_master_dsn"] != "")  $this->db = new $dbclassname($config["db_select"] . ":" . $config["db_master_dsn"], ($config["db_login"] ? $config["db_master_user"] : false), ($config["db_login"] ? $config["db_master_pass"] : false));
+			else  $this->db = new $dbclassname($config["db_select"] . ":" . $config["db_dsn"], ($config["db_login"] ? $config["db_user"] : false), ($config["db_login"] ? $config["db_pass"] : false));
+
+			$dbprefix = $config["db_table_prefix"];
+			$this->api_db_assets = $dbprefix . "assets";
+		}
+
+		public function AddItems(&$itemsinfo)
+		{
+			if (!isset($itemsinfo["lastts"]))  $itemsinfo["lastts"] = time();
+			if (!isset($itemsinfo["canadd"]))  $itemsinfo["canadd"] = true;
+
+			if ($itemsinfo["canadd"])
+			{
+				$prevts = $itemsinfo["lastts"];
+
+				$nextpub = $this->db->GetOne("SELECT", array(
+					"MIN(publish)",
+					"FROM" => "?",
+					"WHERE" => "publish > ?",
+				), $this->api_db_assets, $prevts);
+
+				if ($nextpub)
+				{
+					$itemsinfo["lastts"] = (int)$nextpub;
+
+					if (!isset($itemsinfo["items"][$itemsinfo["lastts"]]))  $itemsinfo["items"][$itemsinfo["lastts"]] = array();
+
+					$result = $this->db->Query("SELECT", array(
+						"*",
+						"FROM" => "?",
+						"WHERE" => "publish = ?"
+					), $this->api_db_assets, $nextpub);
+
+					while ($row = $result->NextRow())
+					{
+						$row->info = json_decode($row->info, true);
+
+						$itemsinfo["items"][$itemsinfo["lastts"]][$row->id] = array("type" => "insert", "data" => array("asset" => (array)$row, "prevasset" => false));
+					}
+				}
+
+
+				$nextremove = $this->db->GetOne("SELECT", array(
+					"MIN(unpublish)",
+					"FROM" => "?",
+					"WHERE" => "unpublish > ?",
+				), $this->api_db_assets, $prevts);
+
+				if ($nextremove)
+				{
+					$ts = (int)$nextremove;
+					if ($ts <= $itemsinfo["lastts"])
+					{
+						$itemsinfo["lastts"] = $ts;
+
+						if (!isset($itemsinfo["items"][$itemsinfo["lastts"]]))  $itemsinfo["items"][$itemsinfo["lastts"]] = array();
+
+						$result = $this->db->Query("SELECT", array(
+							"*",
+							"FROM" => "?",
+							"WHERE" => "unpublish = ?"
+						), $this->api_db_assets, $nextremove);
+
+						while ($row = $result->NextRow())
+						{
+							$row->info = json_decode($row->info, true);
+
+							$itemsinfo["items"][$itemsinfo["lastts"]][$row->id] = array("type" => "delete", "data" => array("asset" => (array)$row, "prevasset" => false));
+						}
+					}
+				}
+
+				$this->canadd = false;
+			}
+		}
+
+		public function RemovedItems(&$itemsinfo, $ts, $sent)
+		{
+			if (!$itemsinfo["canadd"] && $ts === $itemsinfo["lastts"])
+			{
+				if (!$sent)  $itemsinfo["lastts"]--;
+				$itemsinfo["canadd"] = true;
+			}
+		}
+	}
+?>
