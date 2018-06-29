@@ -118,6 +118,13 @@ setInterval(function() {
 			if (count($errors))  $errors["msg"] = "Please correct the errors below and try again.";
 			else if (isset($_REQUEST["next"]))
 			{
+				// Create the 'files' cache directory.
+				if (!count($errors))
+				{
+					if (!is_dir($config["rootpath"] . "/files") && @mkdir($config["rootpath"] . "/files") === false)  $errors["msg"] = "Unable to create 'files' subdirectory.";
+					else if (@file_put_contents($config["rootpath"] . "/files/index.html", "") === false)  $errors["msg"] = "Unable to create the file '" . htmlspecialchars($config["rootpath"] . "/files/index.html") . "'.";
+				}
+
 				$rng = new CSPRNG(true);
 
 				$config = array(
@@ -143,13 +150,6 @@ setInterval(function() {
 					else if (function_exists("opcache_invalidate"))  @opcache_invalidate($filename, true);
 				}
 
-				// Create the 'files' cache directory.
-				if (!count($errors))
-				{
-					if (!is_dir($config["rootpath"] . "/files") && @mkdir($config["rootpath"] . "/files") === false)  $errors["msg"] = "Unable to create 'files' subdirectory.";
-					else if (@file_put_contents($config["rootpath"] . "/files/index.html", "") === false)  $errors["msg"] = "Unable to create the file '" . htmlspecialchars($config["rootpath"] . "/files/index.html") . "'.";
-				}
-
 				if (!count($errors))
 				{
 					$_SESSION["bb_cms_admin_installed"] = true;
@@ -163,7 +163,7 @@ setInterval(function() {
 
 		OutputHeader("Step 2:  API Access Information");
 
-		if (count($errors))  $ff->OutputMessage("error", "Please correct the errors below to continue.");
+		if (count($errors))  $ff->OutputMessage("error", $errors["msg"]);
 		else if ($message != "")  $ff->OutputMessage("info", $message);
 
 		$contentopts = array(
