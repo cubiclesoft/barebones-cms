@@ -4,7 +4,7 @@
 
 	class BarebonesCMS
 	{
-		protected $web, $fp, $host, $apikey, $apisecret;
+		protected $web, $fp, $debug, $host, $apikey, $apisecret;
 
 		public function __construct()
 		{
@@ -13,6 +13,7 @@
 
 			$this->web = new WebBrowser();
 			$this->fp = false;
+			$this->debug = false;
 			$this->host = false;
 			$this->apikey = false;
 			$this->apisecret = false;
@@ -1694,6 +1695,12 @@ setInterval(function() {
 			return call_user_func_array((defined("CS_TRANSLATE_FUNC") && function_exists(CS_TRANSLATE_FUNC) ? CS_TRANSLATE_FUNC : "sprintf"), $args);
 		}
 
+		// Enabling debug mode can leak information (e.g. the API key).
+		public function SetDebug($debug)
+		{
+			$this->debug = (bool)$debug;
+		}
+
 		protected function RunAPI($method, $apipath, $options = array(), $expected = 200, $encodejson = true, $decodebody = true)
 		{
 			if ($this->host === false || $this->apikey === false)  return array("success" => false, "error" => self::CMS_Translate("Missing host or API key."), "errorcode" => "no_access_info");
@@ -1717,6 +1724,7 @@ setInterval(function() {
 					"X-APIKey" => $this->apikey
 				)
 			);
+			if ($this->debug)  $options2["debug"] = true;
 
 			if ($this->fp !== false)  $options2["fp"] = $this->fp;
 
@@ -1786,12 +1794,29 @@ setInterval(function() {
 
 			if (!$result["success"])  return $result;
 
+			if ($this->debug)
+			{
+				echo "------- RAW SEND START -------\n";
+				echo $result["rawsend"];
+				echo "------- RAW SEND END -------\n\n";
+
+				echo "------- RAW RECEIVE START -------\n";
+				echo $result["rawrecv"];
+				echo "------- RAW RECEIVE END -------\n\n";
+			}
+
 			if (isset($result["fp"]) && is_resource($result["fp"]))  $this->fp = $result["fp"];
 			else  $this->fp = false;
 
 			if ($result["response"]["code"] != $expected)  return array("success" => false, "error" => self::CMS_Translate("Expected a %d response from the Barebones CMS API.  Received '%s'.", $expected, $result["response"]["line"]), "errorcode" => "unexpected_barebones_cms_api_response", "info" => $result);
 
-			if ($decodebody)  return json_decode($result["body"], true);
+			if ($decodebody)
+			{
+				$data = json_decode($result["body"], true);
+				if (!is_array($data))  return array("success" => false, "error" => self::CMS_Translate("Unable to decode the server response as JSON."), "errorcode" => "expected_json", "info" => $result);
+
+				return $data;
+			}
 
 			return $result;
 		}

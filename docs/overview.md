@@ -10,7 +10,7 @@ There are three major components to the release distribution:  The Barebones CMS
 Barebones CMS API
 -----------------
 
-Barebones CMS has always been about getting to the essence of content management.  As such, the [Barebones CMS API](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/api.md) is solely responsible for storing, retrieving, and managing content and files.
+Barebones CMS has always been about getting to the essence of content management.  As such, the [Barebones CMS API](api.md) is solely responsible for storing, retrieving, and managing content and files.
 
 The API can be installed anywhere in the world and in a variety of configurations.  The API integrates with the [/feeds extension](https://github.com/cubiclesoft/cloud-storage-server-ext-feeds) of [Cloud Storage Server](https://github.com/cubiclesoft/cloud-storage-server) for realtime time-based content change notifications (e.g. the moment content reaches publish time).
 
@@ -21,9 +21,9 @@ Barebones CMS is actually the API.  However, an API by itself is not terribly us
 Barebones CMS SDK
 -----------------
 
-The [Barebones CMS SDK](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/sdk.md) communicates with the API to store, retrieve, and manage content.
+The [Barebones CMS SDK](sdk.md) communicates with the API to store, retrieve, and manage content.
 
-A variety of [frontend patterns](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/frontend-patterns.md) are available to make it easy to build frontends that utilize the SDK to efficiently deliver content to website visitors.
+A variety of [frontend patterns](frontend-patterns.md) are available to make it easy to build frontends that utilize the SDK to efficiently deliver content to website visitors.
 
 The SDK also provides convenient routines for accessing binary data managed by the API including images, audio, and video and delivering them to a web browser or even caching them on the local file system for faster delivery later.
 
@@ -36,10 +36,10 @@ Barebones CMS Admin Interface
 
 The Barebones CMS administrative interface utilizes the Barebones CMS SDK to communicate with the Barebones CMS API.
 
-![Screenshot of the Barebones CMS administrative interface](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/images/admin_interface_screenshot.png?raw=true "Barebones CMS administrative interface")
+![Screenshot of the Barebones CMS administrative interface](images/admin_interface_screenshot.png?raw=true "Barebones CMS administrative interface")
 
 [Try the demo](http://barebonescms.com/demo/)
 
-The admin interface can be [installed anywhere](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/docs/install.md), including a personal computer or behind a corporate firewall.
+The admin interface can be [installed anywhere](install.md), including a personal computer or behind a corporate firewall.
 
-The included fullscreen content editor provides powerful editing tools in one compact fully responsive interface that works equally well on desktops and mobile devices.  The entire admin interface is also fully extensible via the [powerful plugin system](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/docs/creating-extensions.md).
+The included fullscreen content editor provides powerful editing tools in one compact fully responsive interface that works equally well on desktops and mobile devices.  The entire admin interface is also fully extensible via the [powerful plugin system](creating-extensions.md).

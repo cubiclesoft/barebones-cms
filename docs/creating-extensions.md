@@ -1,7 +1,7 @@
 Creating Extensions
 ===================
 
-Barebones CMS is extensible through plugins, language packs, and even extending the [Barebones CMS API](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/api.md).
+Barebones CMS is extensible through plugins, language packs, and even extending the [Barebones CMS API](api.md).
 
 This document covers the creation of new extensions for the Barebones CMS administrative interface.
 

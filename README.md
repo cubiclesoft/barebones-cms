@@ -5,14 +5,14 @@ Barebones CMS pushes the limits of content management and solves many of today's
 
 [Try the demo](http://barebonescms.com/demo/)
 
-![Screenshot of the Barebones CMS administrative interface](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/images/admin_interface_screenshot.png?raw=true "Barebones CMS administrative interface")
+![Screenshot of the Barebones CMS administrative interface](docs/images/admin_interface_screenshot.png?raw=true "Barebones CMS administrative interface")
 
 [![Donate](https://cubiclesoft.com/res/donate-shield.png)](https://cubiclesoft.com/donate/)
 
 Features
 --------
 
-* [API-driven architecture](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/docs/api.md).
+* [API-driven architecture](docs/api.md).
 * [Uniquely immersive content editor](demo video).
 * Beautiful and elegant fully-responsive user interface for any device.
 * Extensive and flexible multilingual support.
@@ -27,13 +27,13 @@ Features
 Getting Started
 ---------------
 
-* [Release overview](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/overview.md) - High-level architecture overview of the release distribution.
-* [Install Barebones CMS](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/install.md) - Download and installation information.
-* [Asset tagging](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/asset-tagging.md) - Tips and tricks for tagging assets.
-* [Frontend patterns](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/frontend-patterns.md) - Static page pattern, news pattern, file caching and delivery, etc.
-* [Creating extentions](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/creating-extensions.md) - Content editor CSS classes, custom embed dialog templates, cache busting, etc.
-* [Using the SDK](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/sdk.md) - Create and modify content, perform bulk data retrieval, and PHP SDK class documentation.
-* [Barebones CMS API](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/api.md) - Configuration file details, endpoints and helper class documentation, and instructions for adding functionality (e.g. integrating with a CDN).
+* [Release overview](docs/overview.md) - High-level architecture overview of the release distribution.
+* [Install Barebones CMS](docs/install.md) - Download and installation information.
+* [Asset tagging](docs/asset-tagging.md) - Tips and tricks for tagging assets.
+* [Frontend patterns](docs/frontend-patterns.md) - Static page pattern, news pattern, file caching and delivery, etc.
+* [Creating extentions](docs/creating-extensions.md) - Content editor CSS classes, custom embed dialog templates, cache busting, etc.
+* [Using the SDK](docs/sdk.md) - Basic content retrieval examples, create and modify content, perform bulk data retrieval, and PHP SDK class documentation.
+* [Barebones CMS API](docs/api.md) - Raw API access examples for building SDKs, in-depth configuration file details, endpoints and helper class documentation, and instructions for adding functionality (e.g. integrating with a CDN).
 * [Available extensions](https://github.com/cubiclesoft/barebones-cms-extensions) - A list of available plugins, language packs, and other extensions for Barebones CMS.
 
 More Information

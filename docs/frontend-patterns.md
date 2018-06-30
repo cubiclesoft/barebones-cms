@@ -7,7 +7,7 @@ The Barebones CMS SDK is designed to aid in building one or more website fronten
 
 Before starting, make sure your web server is [set up properly](http://cubicspot.blogspot.com/2017/05/secure-web-server-permissions-that-just.html).
 
-All of the frontend examples require a copy of the Barebones CMS SDK in a subdirectory called 'support'.  The examples follow the [suggested tagging approach](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/asset-tagging.md) and assume a mostly static content website with some dynamic elements (i.e. a standard business website).  Adjust the examples for your use-case.
+All of the frontend examples require a copy of the Barebones CMS SDK in a subdirectory called 'support'.  The examples follow the [suggested tagging approach](asset-tagging.md) and assume a mostly static content website with some dynamic elements (i.e. a standard business website).  Adjust the examples for your use-case.
 
 File Retrieval Pattern
 ----------------------

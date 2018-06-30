@@ -451,6 +451,8 @@
 				"assets" => array()
 			);
 
+			if (!$this->write)  $ts = time();
+
 			$numrows = 0;
 			while ($row = $result->NextRow())
 			{

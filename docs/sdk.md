@@ -7,6 +7,55 @@ The SDK is utilized heavily by the Barebones CMS administrative interface to tal
 
 The official Barebones CMS PHP SDK supports [Remoted API Server](https://github.com/cubiclesoft/remoted-api-server).  The PHP SDK class can also be extended to provide additional functionality (i.e. most functions are only protected).  The default behavior of the PHP SDK is to remain connected to the server so that multiple requests to the API can be handled efficiently.
 
+Basic Usage
+-----------
+
+Without the SDK, a cURL call like this one can work in a pinch:
+
+```
+curl -H 'X-APIKey: APIKEY' 'https://demo.barebonescms.com/sessions/0.0.0.0/some-words/api/?ver=1&api=assets&start=1&end=`date +%s`&limit=50'
+```
+
+With the SDK, simplified, refined control is possible:
+
+```php
+<?php
+	// Place the PHP SDK files in a subdirectory called 'support' or adjust the path below.
+	require_once "support/sdk_barebones_cms_api.php";
+
+	$cms = new BarebonesCMS();
+
+	// Replace the host, API key, and secret.
+	// When using a read-only API key, the third parameter can be removed.
+	$cms->SetAccessInfo("https://demo.barebonescms.com/sessions/0.0.0.0/some-words/api/", "[API key here]", "[API secret here]");
+
+	// Find the most recently published assets.
+	$options = array(
+		"start" => 1,
+		"end" => time()
+	);
+
+	$result = $cms->GetAssets($options, 50);
+	if (!$result["success"])
+	{
+		echo "Failed to load assets.  Error:  " . $result["error"] . " (" . $result["errorcode"] . ")\n";
+		var_dump($result["info"]);
+
+		exit();
+	}
+
+	$assets = $result["assets"];
+
+	foreach ($assets as $asset)
+	{
+		$asset = $cms->NormalizeAsset($asset);
+
+		$lang = $cms->GetPreferredAssetLanguage($asset, "", "en-us");
+		echo $asset["id"] . " | " . $asset["uuid"] . " | " . $asset["langinfo"][$lang]["title"] . "\n";
+	}
+?>
+```
+
 BarebonesCMS::__construct()
 ---------------------------
 
@@ -33,7 +82,7 @@ Returns:  Nothing.
 
 This function sets the access information for later use with API calls.
 
-Some functions such as `GetAssets()` only require read only access while other functions such as `GetRevisions()` and `StoreAsset()` require write access.  See the [Barebones CMS API documentation](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/api.md).
+Some functions such as `GetAssets()` only require read only access while other functions such as `GetRevisions()` and `StoreAsset()` require write access.  See the [Barebones CMS API documentation](api.md).
 
 This function also reinitializes internal structures, which will trigger a disconnect from the server if an API call has already been made.
 
@@ -695,7 +744,7 @@ The `$options` array accepts the following options:
 * $recvratelimit - An integer containing the amount of data per second to receive over the network (Default is false).
 * $cacheonly - A boolean that indicates whether or not to only cache the retrieved file(s) locally (Default is false).
 
-See the [Frontend Patterns documentation](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/frontend-patterns.md) for example usage.
+See the [Frontend Patterns documentation](frontend-patterns.md) for example usage.
 
 BarebonesCMS::PrecacheDeliverFile($id, $filename, $options)
 -----------------------------------------------------------
@@ -791,7 +840,7 @@ The `$options` array accepts the following options:
 
 The modified asset should never be stored via the API unless you really know what you are doing.
 
-See the [Frontend Patterns documentation](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/frontend-patterns.md) for example usage.
+See the [Frontend Patterns documentation](frontend-patterns.md) for example usage.
 
 BarebonesCMS::GenerateStoryAssetSummary($asset, $options = array(), $lang = false)
 ----------------------------------------------------------------------------------
@@ -816,7 +865,7 @@ The `$options` array accepts the following options:
 
 The modified asset should never be stored via the API.
 
-See the [Frontend Patterns documentation](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/frontend-patterns.md) for example usage.
+See the [Frontend Patterns documentation](frontend-patterns.md) for example usage.
 
 BarebonesCMS::CanRefreshContent($validtoken, $requestkey = "refresh")
 ---------------------------------------------------------------------
@@ -1028,6 +1077,19 @@ Parameters:
 Returns:  A string containing a translation.
 
 This internal static function takes input strings and translates them from English to some other language if CS_TRANSLATE_FUNC is defined to be a valid PHP function name.
+
+BarebonesCMS::SetDebug($debug)
+------------------------------
+
+Access:  public
+
+Parameters:
+
+* $debug - A boolean indicating whether or not to output all information sent and received.
+
+Returns:  Nothing.
+
+This function enables debug mode for API calls.  Generally a bad idea for the web as the API key can be leaked.  Can be useful to diagnose issues from the command-line.
 
 BarebonesCMS::RunAPI($method, $apipath, $options = array(), $expected = 200, $encodejson = true, $decodebody = true)
 --------------------------------------------------------------------------------------------------------------------

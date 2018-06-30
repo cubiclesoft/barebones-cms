@@ -1,16 +1,65 @@
 Barebones CMS API Documentation
 ===============================
 
-This is the technical documentation for the Barebones CMS API.  The API is, for all intents and purposes, Barebones CMS and is responsible for storing and retrieving assets, revisions, tags, and files.
+This is the in-depth technical documentation for the Barebones CMS API.  The API is, for all intents and purposes, Barebones CMS and is responsible for storing and retrieving assets, revisions, tags, and files.
 
-To install Barebones CMS API, see the [Installation Guide](https://github.com/cubiclesoft/barebones-cms-docs/blob/master/install.md).
+To install Barebones CMS API, see the [Installation Guide](install.md).
+
+Basic Usage
+-----------
+
+An example retrieving assets with cURL from a Linux command-line:
+
+```
+curl -H 'X-APIKey: APIKEY' 'https://demo.barebonescms.com/sessions/0.0.0.0/some-words/api/?ver=1&api=assets&start=1&end=`date +%s`&limit=50'
+```
+
+A more complex request/response cycle:
+
+```
+------- RAW SEND START -------
+GET /sessions/0.0.0.0/some-words/api/?ver=1&ts=1530330685&api=assets&start=1&end=1530330685&limit=50 HTTP/1.1
+Host: demo.barebonescms.com
+Connection: keep-alive
+Accept: text/html, application/xhtml+xml, */*
+Accept-Language: en-us,en;q=0.5
+Cache-Control: max-age=0
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0
+X-Apikey: WsXEd3vBXYSTaORT2iBfj6ENkpRHpCJtyJ7PyfEMrf5FW7GBNyyLQ01EcRxS6IpN
+
+------- RAW SEND END -------
+
+------- RAW RECEIVE START -------
+HTTP/1.1 200 OK
+Server: nginx/1.14.0
+Date: Sat, 30 Jun 2018 03:51:25 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-Powered-By: PHP/7.2.7
+
+650
+{"success":true,"assets":[{"type":"story","langinfo":{"en-us":{"title":"A good story needs a good headline like this one!","body":"<p>\n    Good stories start with good headlines. For instance, if you want to share about gardening adventures, you might choose a headline like, \"End your brown thumb with these gardening success stories!\" and use a photo like:\n</p>\n<img data-src-info=\"{&quot;id&quot;:1,&quot;file&quot;:{&quot;path&quot;:&quot;17712&quot;,&quot;filename&quot;:&quot;back-yard-250890_1920.jpg&quot;,&quot;origfilename&quot;:&quot;back-yard-250890_1920.jpg&quot;,&quot;size&quot;:1577040,&quot;created&quot;:1530330596,&quot;modified&quot;:1530330605},&quot;fileinfo&quot;:{&quot;crops&quot;:{&quot;&quot;:{&quot;x&quot;:0,&quot;y&quot;:0,&quot;x2&quot;:1,&quot;y2&quot;:1},&quot;16:9&quot;:{&quot;x&quot;:0.5495283018867925,&quot;y&quot;:0.0809748427672956,&quot;x2&quot;:1,&quot;y2&quot;:0.41882861635220126},&quot;3:4&quot;:{},&quot;1:1&quot;:{}}},&quot;cropselected&quot;:&quot;16:9&quot;,&quot;crop&quot;:&quot;0.5495283018867925,0.0809748427672956,1,0.41882861635220126&quot;}\" src=\"//0.0.0.0/transform.gif\">"}},"publish":1530330540,"unpublish":0,"tags":["/gardening/"],"lastupdated":1530330630,"lastupdatedby":"","lastip":"000.000.000.0","filesinfo":{"back-yard-250890_1920.jpg":[]},"protected":[],"uuid":"17712-a-good-story-needs-a-good-headline-like-this","langorder":["en-us"],"id":"1","files":{"back-yard-250890_1920.jpg":{"path":"17712","filename":"back-yard-250890_1920.jpg","origfilename":"back-yard-250890_1920.jpg","size":1577040,"created":1530330596,"modified":1530330605}}}]}
+0
+
+------- RAW RECEIVE END -------
+```
+
+[Using an SDK](sdk.md) is the preferred method to access the Barebones CMS API from an application development perspective.  Simple GET requests can be performed using tools such as cURL as seen above but many request types require digital signatures.  In addition, assets created by the Barebones CMS admin interface generally require a final transformation prior to delivery to the client.
+
+Architecture
+------------
+
+[![Architecture overview diagram](docs/images/architecture_diagram.png?raw=true "Barebones CMS architecture diagram")](https://www.youtube.com/watch?v=uybGZ0V-tYY "Barebones CMS Architecture Overview")
+
+The API is the core of the product.  The [Barebones CMS SDK](sdk.md) accesses the API to perform various tasks, including [content delivery](frontend-patterns.md) to website visitors.  The [Barebones CMS administrative interface](overview.md) obviously steals the spotlight from a content creation and editing perspective as it transparently uses the Barebones CMS SDK to access the API.
 
 How It Works
 ------------
 
 The API accepts inputs a variety of different ways.  Standard GET, standard POST (either `application/x-www-form-urlencoded` or `multipart/form-data`), `Content-type: application/json`, and "rest_data".  All input data is normalized.  The last option allows for a single parameter named "rest_data" to be a valid JSON encoded object.  If there is a problem with the data, the response error code is `invalid_input`.
 
-The next step of the API verifies credentials by checking for and validating the "X-APIKey" and optional "X-Signature" headers.  The API supports two different API keys:
+The next section of the API verifies credentials by checking for and validating the "X-APIKey" and optional "X-Signature" headers.  The API supports two different API keys:
 
 * Read-only access.  The read-only API key grants an unlimited number requests to the API but is restricted to retrieving assets and files.
 * Read-write access.  The read-write API key plus a digital signature for the request using the read-write secret grants the same rights as read only access and also full access to manage and modify assets, tags, and files.
