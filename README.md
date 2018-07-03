@@ -5,7 +5,7 @@ Barebones CMS pushes the limits of content management and solves many of today's
 
 [Try the demo](http://barebonescms.com/demo/)
 
-![Screenshot of the Barebones CMS administrative interface](docs/images/admin_interface_screenshot.png?raw=true "Barebones CMS administrative interface")
+[![Screenshot of the Barebones CMS administrative interface](docs/images/admin_interface_screenshot.png?raw=true "Barebones CMS administrative interface")](http://barebonescms.com/demo/)
 
 [![Donate](https://cubiclesoft.com/res/donate-shield.png)](https://cubiclesoft.com/donate/)
 
