@@ -1513,12 +1513,14 @@
 
 				// Extract the first image found.
 				$info["img"] = false;
+				$info["img_src"] = false;
 				$rows = $root->Find('img[src]');
 				foreach ($rows as $row)
 				{
 					if (strncmp($row->src, "//0.0.0.0/", 10))
 					{
 						$info["img"] = $row->GetOuterHTML();
+						$info["img_src"] = $row->src;
 						$html->Remove($row->ID());
 
 						break;
