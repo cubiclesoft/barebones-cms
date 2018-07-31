@@ -39,7 +39,7 @@ Next, create a 'config.php' file in the new directory:
 
 	// Cache directory options.
 	// See DeliverFile() in the SDK documentation for details.
-	$config["cache_dir"] = $config["rootpath"] . "/cache";
+	$config["cache_dir"] = $config["rootpath"] . "/file_cache";
 	$config["api_dir"] = false;
 ?>
 ```
