@@ -41,7 +41,6 @@ Next, create a 'config.php' file in the new directory:
 	// See DeliverFile() in the SDK documentation for details.
 	$config["cache_dir"] = $config["rootpath"] . "/cache";
 	$config["api_dir"] = false;
-?>
 ```
 
 The above configuration requires a 'cache' subdirectory to exist that can be written to by the web server.  The SDK will cache files to that location on disk for faster retrieval/processing later.
@@ -99,7 +98,6 @@ Next, create an 'index.php' file in the same directory:
 	);
 
 	$cms->DeliverFile($_REQUEST["id"], $_REQUEST["filename"], $options);
-?>
 ```
 
 It is recommended to periodically clean up the cache directory via a cron job.  Create a 'cleanup.php' file in the same directory:
