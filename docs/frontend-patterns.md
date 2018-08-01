@@ -226,6 +226,8 @@ Create an 'index.php' file in the same directory as the 'config.php' file:
 			exit();
 		}
 
+		require_once $config["rootpath"] . "/support/sdk_barebones_cms_api.php";
+
 		// Initialize the SDK.
 		$cms = new BarebonesCMS();
 		$cms->SetAccessInfo($config["read_url"], $config["read_apikey"]);
@@ -519,6 +521,8 @@ Example news pattern usage:
 
 			exit();
 		}
+
+		require_once $config["rootpath"] . "/support/sdk_barebones_cms_api.php";
 
 		// Initialize the SDK.
 		$cms = new BarebonesCMS();
