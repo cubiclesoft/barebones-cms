@@ -1,6 +1,6 @@
 <?php
 	// Barebones CMS API future calculation class for /feeds API integration.
-	// (C) 2017 CubicleSoft.  All Rights Reserved.
+	// (C) 2018 CubicleSoft.  All Rights Reserved.
 
 	class CSS_Extension_feeds__@NAME@
 	{
@@ -16,6 +16,8 @@
 
 			if ($config["db_master_dsn"] != "")  $this->db = new $dbclassname($config["db_select"] . ":" . $config["db_master_dsn"], ($config["db_login"] ? $config["db_master_user"] : false), ($config["db_login"] ? $config["db_master_pass"] : false));
 			else  $this->db = new $dbclassname($config["db_select"] . ":" . $config["db_dsn"], ($config["db_login"] ? $config["db_user"] : false), ($config["db_login"] ? $config["db_pass"] : false));
+
+			$this->db->Query("USE", $config["db_name"]);
 
 			$dbprefix = $config["db_table_prefix"];
 			$this->api_db_assets = $dbprefix . "assets";

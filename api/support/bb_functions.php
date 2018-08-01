@@ -1214,7 +1214,7 @@
 				);
 
 				if ($row !== false && ($prevasset["publish"] != $data["asset"]["publish"] || $prevasset["unpublish"] != $data["asset"]["unpublish"]))  BB_CloudStorageServerFeedsNotify($css, $this->config["css_feeds_name"], "delete", $id, $data2, time() - 1);
-				if ($data["asset"]["publish"] > 0 && $data["asset"]["unpublish"] > time())  BB_CloudStorageServerFeedsNotify($css, $this->config["css_feeds_name"], ($data["asset"]["publish"] > time() ? "insert" : "update"), $id, $data2, $data["asset"]["publish"]);
+				if ($data["asset"]["publish"] > 0 && (!$data["asset"]["unpublish"] || $data["asset"]["unpublish"] > time()))  BB_CloudStorageServerFeedsNotify($css, $this->config["css_feeds_name"], ($data["asset"]["publish"] > time() ? "insert" : "update"), $id, $data2, $data["asset"]["publish"]);
 				if ($data["asset"]["unpublish"] > 0)  BB_CloudStorageServerFeedsNotify($css, $this->config["css_feeds_name"], "delete", $id, $data2, $data["asset"]["unpublish"]);
 			}
 
