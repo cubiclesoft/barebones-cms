@@ -859,7 +859,7 @@
 					$asset = self::NormalizeAsset($result["assets"][0]);
 				}
 
-				if ($asset !== false)
+				if ($mainfp ===false && $asset !== false)
 				{
 					if (!isset($asset["files"]) || !isset($asset["files"][$filename]))
 					{
@@ -1390,6 +1390,7 @@
 								"apiurl" => $options["tag_callback_opts"]->apiurl,
 								"getfileurl" => $options["tag_callback_opts"]->getfileurl,
 								"getfilesecret" => $options["tag_callback_opts"]->getfilesecret,
+								"path" => $data["file"]["path"],
 							);
 
 							if (isset($data["download"]))  $options2["download"] = $data["file"]["origfilename"];
