@@ -13,7 +13,7 @@ Features
 --------
 
 * [API-driven architecture](docs/api.md).
-* [Uniquely immersive content editor](demo video).
+* [Uniquely immersive content editor](https://www.youtube.com/watch?v=5xIIzc_i7g0 "Barebones CMS Demo Video").
 * Beautiful and elegant fully-responsive user interface for any device.
 * Extensive and flexible multilingual support.
 * A great revision system.
