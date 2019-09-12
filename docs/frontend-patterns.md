@@ -147,6 +147,9 @@ First, create a 'config.php' file at the location for the static page(s):
 	// The amount of the URL to remove to calculate the asset tag to search for.
 	$config["tag_base_path"] = "/";
 
+	// A prefix to add to the tag to calculate the asset tag to search for.
+	$config["tag_base_prefix"] = "";
+
 	// The maximum number of assets to load.
 	$config["max_assets"] = 25;
 
@@ -206,6 +209,8 @@ Create an 'index.php' file in the same directory as the 'config.php' file:
 
 		exit();
 	}
+
+	if ($config["tag_base_prefix"] !== "")  $tag = $config["tag_base_prefix"] . $tag;
 
 	// Create the options array.
 	$aoptions = array(
@@ -312,8 +317,13 @@ Create an 'index.php' file in the same directory as the 'config.php' file:
 ?>
 <div class="contentwrap">
 <div class="contentwrapinner">
+<?php
+		if ($tag !== $config["tag_base_prefix"] . "/")
+		{
+?>
 <h1><?=htmlspecialchars($title)?></h1>
 <?php
+		}
 	}
 ?>
 
@@ -388,27 +398,45 @@ Next, create a file called 'layout.php' in the same directory:
 <?php
 	}
 
-	function Output404()
+	function OutputBasicHeader($title, $header)
 	{
-		// Output site header.
-		http_response_code(404);
-
-		OutputHeader("Invalid Resource | YourWebsiteHere");
+		OutputHeader($title . " | YourWebsiteHere");
 
 ?>
 <div class="contentwrap">
 <div class="contentwrapinner">
-<h1>Invalid Resource</h1>
+<h1><?=htmlspecialchars($header)?></h1>
+<?php
+	}
 
-The requested resource does not exist, was unpublished, or has moved.  Unfortunately, this is a 404 so there's nothing to do.
+	function OutputBasicFooter()
+	{
+?>
 </div>
 </div>
 <?php
 
-		// Output site footer.
 		OutputFooter();
 
 		exit();
+	}
+
+	function OutputPage($title, $header, $message)
+	{
+		OutputBasicHeader($title, $header);
+
+		echo $message;
+
+		OutputBasicFooter();
+
+		exit();
+	}
+
+	function Output404()
+	{
+		http_response_code(404);
+
+		OutputPage("Invalid Resource", "Invalid Resource", "<p>The requested resource does not exist, was unpublished, or has moved.  Unfortunately, this is a 404 so there's nothing to do.</p>");
 	}
 ?>
 ```
@@ -465,6 +493,8 @@ Example news pattern usage:
 	$tag = Request::GetURLBase();
 	if (strncasecmp($tag, $config["tag_base_path"], strlen($config["tag_base_path"])) == 0)  $tag = substr($tag, strlen($config["tag_base_path"]));
 	if ($tag === "" || $tag{0} !== "/")  $tag = "/" . $tag;
+
+	if ($config["tag_base_prefix"] !== "")  $tag = $config["tag_base_prefix"] . $tag;
 
 	// Create the options array.
 	if (substr($tag, -1) === "/")
@@ -687,10 +717,16 @@ Example news pattern usage:
 ?>
 <div class="contentwrap">
 <div class="contentwrapinner">
-<?php if (count($breadcrumbs))  echo "<div class=\"breadcrumbs\">" . implode(" &raquo; ", $breadcrumbs) . "</div>\n"; ?>
-<h1><?=htmlspecialchars($title)?></h1>
-
 <?php
+		if (count($breadcrumbs))  echo "<div class=\"breadcrumbs\">" . implode(" &raquo; ", $breadcrumbs) . "</div>\n";
+
+		if ($tag !== $config["tag_base_prefix"] . "/")
+		{
+?>
+<h1><?=htmlspecialchars($title)?></h1>
+<?php
+		}
+
 		if (count($assets))
 		{
 ?>
@@ -815,7 +851,14 @@ Example news pattern usage:
 ?>
 <div class="contentwrap">
 <div class="contentwrapinner">
+<?php
+			if ($tag !== $config["tag_base_prefix"] . "/")
+			{
+?>
 <h1><?=htmlspecialchars($title)?></h1>
+<?php
+			}
+?>
 <div class="assetpublished"><?=htmlspecialchars($dispmap["_publish_format"]($asset["publish"]))?></div>
 <?php
 		}

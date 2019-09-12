@@ -117,7 +117,7 @@
 				$items = array();
 				foreach ($options[$key] as $item)
 				{
-					if (is_string($item))  $items[] = $item;
+					if (is_string($item) || is_numeric($item))  $items[] = (string)$item;
 				}
 
 				if (count($items))  $apipath[$key . "[]"] = $items;

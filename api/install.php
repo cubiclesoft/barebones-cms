@@ -341,7 +341,7 @@ setInterval(function() {
 							"info" => array("STRING", 3, "NOT NULL" => true),
 						),
 						array(
-							array("PRIMARY", array("aid", "revnum"), "NAME" => $api_db_revisions . "_revision"),
+							array("PRIMARY", array("aid", "revnum"), "NAME" => "revision"),
 						)));
 					}
 					catch (Exception $e)

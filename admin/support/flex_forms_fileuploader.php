@@ -33,7 +33,8 @@
 				$options["params"]["fileuploader"] = "1";
 
 				if (isset($field["maxchunk"]))  $options["fileupload"]["maxChunkSize"] = floor($field["maxchunk"]);
-				else  $options["maxfilesize"] = (isset($field["maxsize"]) ? floor($field["maxsize"]) : self::GetMaxUploadFileSize());
+				else if (!isset($field["maxsize"]))  $options["maxfilesize"] = self::GetMaxUploadFileSize();
+				else  $options["maxfilesize"] = floor($field["maxsize"]);
 
 				if (isset($options["maxfilesize"]) && $options["maxfilesize"] >= 1)  $options["fileupload"]["limitMultiFileUploadSize"] = $options["maxfilesize"];
 
@@ -137,10 +138,10 @@ jQuery(function() {
 
 		public static function GetFileStartPosition()
 		{
-			if (isset($_SERVER["HTTP_CONTENT_RANGE"]))
+			if (isset($_SERVER["HTTP_CONTENT_RANGE"]) || isset($_SERVER["HTTP_RANGE"]))
 			{
 				// Content-Range: bytes (*|integer-integer)/(*|integer-integer)
-				$vals = explode(" ", preg_replace('/\s+/', " ", str_replace(",", "", $_SERVER["HTTP_CONTENT_RANGE"])));
+				$vals = explode(" ", preg_replace('/\s+/', " ", str_replace(",", "", (isset($_SERVER["HTTP_CONTENT_RANGE"]) ? $_SERVER["HTTP_CONTENT_RANGE"] : $_SERVER["HTTP_RANGE"]))));
 				if (count($vals) === 2 && strtolower($vals[0]) === "bytes")
 				{
 					$vals = explode("/", trim($vals[1]));

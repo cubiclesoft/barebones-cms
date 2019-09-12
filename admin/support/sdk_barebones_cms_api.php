@@ -117,7 +117,7 @@
 				$items = array();
 				foreach ($options[$key] as $item)
 				{
-					if (is_string($item))  $items[] = $item;
+					if (is_string($item) || is_numeric($item))  $items[] = (string)$item;
 				}
 
 				if (count($items))  $apipath[$key . "[]"] = $items;
@@ -755,9 +755,10 @@
 					// Sleeping for some amount of time will equalize the rate.
 					// So, solve this for $x:  $size / ($x + $difftime) = $limit
 					$amount = ($size - ($limit * $difftime)) / $limit;
+					$amount += 0.001;
 
 					if ($async)  return microtime(true) + $amount;
-					else  usleep($amount);
+					else  usleep($amount * 1000000);
 				}
 			}
 

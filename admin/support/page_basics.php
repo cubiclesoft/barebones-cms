@@ -1,6 +1,6 @@
 <?php
 	// Admin Pack server-side page manipulation functions.
-	// (C) 2017 CubicleSoft.  All Rights Reserved.
+	// (C) 2019 CubicleSoft.  All Rights Reserved.
 
 	// Most functionality has been moved into FlexForms.  Much of this is legacy interface code for convenience and to avoid breaking things badly.
 	require_once "flex_forms.php";
@@ -211,7 +211,7 @@
 		else
 		{
 			$rooturl = BB_GetRequestURLBase();
-			if (substr($rooturl, -1) != "/")  $rooturl = dirname($rooturl);
+			if (substr($rooturl, -1) != "/")  $rooturl = str_replace("\\", "/", dirname($rooturl));
 			if (substr($rooturl, -1) == "/")  $rooturl = substr($rooturl, 0, -1);
 		}
 
@@ -303,40 +303,13 @@
 		return $bb_flexforms->CheckSecurityToken($name);
 	}
 
-	function BB_GetBackQueryString()
-	{
-		$result = $_GET;
-		unset($result["bb_msg"]);
-		unset($result["bb_msgtype"]);
-
-		return str_replace(array("=", "+", "/"), array("", "-", "_"), base64_encode(serialize($result)));
-	}
-
 	function BB_GetBackURL($query = array(), $fullrequest = false, $protocol = "")
 	{
-		if (isset($_REQUEST["bb_back"]))
-		{
-			$items = unserialize(base64_decode(str_replace(array("-", "_"), array("+", "/"), $_REQUEST["bb_back"])));
-			if (is_array($items))
-			{
-				foreach ($items as $key => $val)
-				{
-					if (!is_array($val))  $query[] = urlencode($key) . "=" . urlencode($val);
-					else
-					{
-						foreach ($val as $val2)  $query[] = urlencode($key) . "[]=" . urlencode($val2);
-					}
-				}
-			}
-		}
-
 		return ($fullrequest ? BB_GetFullRequestURLBase($protocol) : BB_GetRequestURLBase()) . (count($query) ? "?" . implode("&", $query) : "");
 	}
 
 	function BB_RedirectPage($msgtype = "", $msg = "", $query = array())
 	{
-		if (count($query))  unset($_REQUEST["bb_back"]);
-
 		if ($msgtype != "")
 		{
 			if (!isset($_REQUEST["bb_msgtype"]) || ($_REQUEST["bb_msgtype"] != "error" && $_REQUEST["bb_msgtype"] != "success" && $_REQUEST["bb_msgtype"] != "info"))  $_REQUEST["bb_msgtype"] = $msgtype;
@@ -418,16 +391,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>@TITLE@</title>
-<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin.css?20170708" type="text/css" media="all" />
-<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin_menu.css?20170708" type="text/css" media="all" />
-<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin_print.css?20170528" type="text/css" media="print" />
+<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin.css?20190329" type="text/css" media="all" />
+<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin_print.css?20190329" type="text/css" media="print" />
 <script type="text/javascript" src="@ROOTURL@/@SUPPORTPATH@/jquery-3.1.1.min.js"></script>
-<script type="text/javascript" src="@ROOTURL@/@SUPPORTPATH@/admin.js?20170528"></script>
+<script type="text/javascript" src="@ROOTURL@/@SUPPORTPATH@/admin.js?20190329"></script>
 <?php if (function_exists("BB_InjectLayoutHead"))  BB_InjectLayoutHead(); ?>
 </head>
 <body>
 <div id="menuwrap">@MENU@</div>
-<div id="contentwrap">@CONTENT@</div>
+<div id="contentwrap" tabindex="-1">@CONTENT@</div>
 </body>
 </html>
 <?php
@@ -445,13 +417,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>@TITLE@</title>
-<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin.css?20170528" type="text/css" media="all" />
-<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin_print.css?20170528" type="text/css" media="print" />
+<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin.css?20190329" type="text/css" media="all" />
+<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin_print.css?20190329" type="text/css" media="print" />
 <script type="text/javascript" src="@ROOTURL@/@SUPPORTPATH@/jquery-3.1.1.min.js"></script>
 <?php if (function_exists("BB_InjectLayoutHead"))  BB_InjectLayoutHead(); ?>
 </head>
 <body>
-<div id="contentwrap">@CONTENT@</div>
+<div id="contentwrap" class="nomenu" tabindex="-1">@CONTENT@</div>
 </body>
 </html>
 <?php
@@ -489,14 +461,14 @@ EOF;
 			ob_start();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>@TITLE@</title>
-<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin_bulkedit.css?201703018" type="text/css" media="all" />
+<link rel="stylesheet" href="@ROOTURL@/@SUPPORTPATH@/admin_bulkedit.css?20190329" type="text/css" media="all" />
 <script type="text/javascript" src="@ROOTURL@/@SUPPORTPATH@/jquery-3.1.1.min.js"></script>
-<script type="text/javascript" src="@ROOTURL@/@SUPPORTPATH@/admin_bulkedit.js?201703018"></script>
+<script type="text/javascript" src="@ROOTURL@/@SUPPORTPATH@/admin_bulkedit.js?20190329"></script>
 <?php if (function_exists("BB_InjectLayoutHead"))  BB_InjectLayoutHead(); ?>
 </head>
 <body>
@@ -519,7 +491,6 @@ EOF;
 		global $bb_rootname, $bb_page_layout, $bb_page_layout_no_menu, $bb_menu_layout, $bb_menu_item_layout;
 
 		if (!isset($contentopts["title"]))  $contentopts["title"] = $title;
-		if (isset($contentopts["hidden"]) && !isset($contentopts["hidden"]["bb_back"]) && (!isset($contentopts["formmode"]) || $contentopts["formmode"] !== "get"))  $contentopts["hidden"]["bb_back"] = (isset($_POST["bb_back"]) ? $_POST["bb_back"] : BB_GetBackQueryString());
 
 		header("Content-Type: text/html; charset=UTF-8");
 
@@ -531,7 +502,7 @@ EOF;
 		else
 		{
 			$rooturl = BB_GetRequestURLBase();
-			if (substr($rooturl, -1) != "/")  $rooturl = dirname($rooturl);
+			if (substr($rooturl, -1) != "/")  $rooturl = str_replace("\\", "/", dirname($rooturl));
 			if (substr($rooturl, -1) == "/")  $rooturl = substr($rooturl, 0, -1);
 		}
 
@@ -553,24 +524,29 @@ EOF;
 		$data2 = "";
 		foreach ($menuopts as $title => $items)
 		{
-			$data3 = "";
-			foreach ($items as $name => $opts)
+			// Allows for injecting custom HTML into the menu.
+			if (is_string($items))  $data2 .= $items;
+			else
 			{
-				if (!is_array($opts))  $opts = array("href" => $opts);
-
-				$data5 = array();
-				foreach ($opts as $name2 => $val)
+				$data3 = "";
+				foreach ($items as $name => $opts)
 				{
-					$data5[] = htmlspecialchars($name2) . "=\"" . htmlspecialchars($val) . "\"";
+					if (!is_array($opts))  $opts = array("href" => $opts);
+
+					$data5 = array();
+					foreach ($opts as $name2 => $val)
+					{
+						$data5[] = htmlspecialchars($name2) . "=\"" . htmlspecialchars($val) . "\"";
+					}
+
+					$data4 = str_replace("@OPTS@", implode(" ", $data5), $bb_menu_item_layout);
+
+					$data3 .= str_replace("@NAME@", htmlspecialchars(BB_Translate($name)), $data4);
 				}
 
-				$data4 = str_replace("@OPTS@", implode(" ", $data5), $bb_menu_item_layout);
-
-				$data3 .= str_replace("@NAME@", htmlspecialchars(BB_Translate($name)), $data4);
+				$data3 = str_replace("@ITEMS@", $data3, $bb_menu_layout);
+				$data2 .= str_replace("@TITLE@", htmlspecialchars(BB_Translate($title)), $data3);
 			}
-
-			$data3 = str_replace("@ITEMS@", $data3, $bb_menu_layout);
-			$data2 .= str_replace("@TITLE@", htmlspecialchars(BB_Translate($title)), $data3);
 		}
 		$data = str_replace("@MENU@", $data2, $data);
 
@@ -579,6 +555,8 @@ EOF;
 		echo substr($data, 0, $pos);
 		BB_PropertyForm($contentopts);
 		echo substr($data, $pos + 9);
+
+		if (!isset($contentopts["exit"]) || $contentopts["exit"])  exit();
 	}
 
 	function BB_GenerateBulkEditPage($title, $contentopts)
@@ -597,7 +575,7 @@ EOF;
 		else
 		{
 			$rooturl = BB_GetRequestURLBase();
-			if (substr($rooturl, -1) != "/")  $rooturl = dirname($rooturl);
+			if (substr($rooturl, -1) != "/")  $rooturl = str_replace("\\", "/", dirname($rooturl));
 			if (substr($rooturl, -1) == "/")  $rooturl = substr($rooturl, 0, -1);
 		}
 
@@ -629,7 +607,7 @@ EOF;
 			{
 				foreach ($contentopts["items"] as $item)
 				{
-					echo "<a href=\"#\"" . (isset($item["id"]) ? " id=\"" . htmlspecialchars($item["id"]) . "\"" : "") . " class=\"" . trim(($altrow ? "altrow" : "") . (isset($item["class"]) ? " " . htmlspecialchars($item["class"]) : "")) . "\" onclick=\"" . (isset($item["onclick"]) ? htmlspecialchars($item["onclick"]) . "; " : "") . "return BB_SelectSidebarItem(this);\">" . htmlspecialchars($item["display"]) . "</a>\n";
+					echo "<a href=\"#\"" . (isset($item["id"]) ? " id=\"" . htmlspecialchars($item["id"]) . "\"" : "") . " class=\"" . trim(($altrow ? "altrow" : "") . (isset($item["class"]) ? " " . htmlspecialchars($item["class"]) : "")) . "\" onclick=\"" . (isset($item["onclick"]) ? htmlspecialchars($item["onclick"]) . "; " : "") . "return BB_SelectSidebarItem(this);\">" . (isset($item["htmldisplay"]) ? $item["htmldisplay"] : htmlspecialchars($item["display"])) . "</a>\n";
 
 					$altrow = !$altrow;
 				}
@@ -639,5 +617,7 @@ EOF;
 			}
 		}
 		echo substr($data, $pos + 7);
+
+		if (!isset($contentopts["exit"]) || $contentopts["exit"])  exit();
 	}
 ?>

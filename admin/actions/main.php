@@ -328,8 +328,8 @@
 ?>
 <style type="text/css">
 .croplinkwrap { display: inline-block; white-space: nowrap; margin-top: 0.3em; margin-right: 0.5em; border: 1px solid #9ACFEA; border-radius: 3px; padding: 0.2em 0.5em; background-color: #D9EDF7; color: #31708F; font-size: 0.9em; }
-#contentwrap .croplinkwrap a.deletecrop, .croplinkwrap a.deletecrop:hover, .croplinkwrap a.deletecrop:visited, .croplinkwrap a.deletecrop:link { display: inline-block; margin-left: 0.5em; border-left: 1px solid #9ACFEA; padding-left: 0.5em; color: #A94442; }
-#contentwrap .croplinkwrap a.deletecrop:hover { color: #BF4D4B; }
+.croplinkwrap a.deletecrop, .croplinkwrap a.deletecrop:hover, .croplinkwrap a.deletecrop:visited, .croplinkwrap a.deletecrop:link { display: inline-block; margin-left: 0.5em; border-left: 1px solid #9ACFEA; padding-left: 0.5em; color: #A94442; }
+.croplinkwrap a.deletecrop:hover { color: #BF4D4B; }
 .nowrap { white-space: nowrap; }
 </style>
 <?php

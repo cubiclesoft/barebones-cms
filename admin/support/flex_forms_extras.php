@@ -1,6 +1,6 @@
 <?php
 	// FlexForms server-side extras.
-	// (C) 2017 CubicleSoft.  All Rights Reserved.
+	// (C) 2019 CubicleSoft.  All Rights Reserved.
 
 	class FlexFormsExtras
 	{
@@ -48,7 +48,7 @@
 		{
 			if (jQuery(window).width() < jQuery(window).height() || jQuery(window).height() < 600)  jQuery('#<?php echo FlexForms::JSSafe($id); ?>').prop('readonly', true);
 
-			jQuery('#<?php echo FlexForms::JSSafe($id); ?>').datepicker(options);
+			jQuery('#<?php echo FlexForms::JSSafe($id); ?>').attr("autocomplete", "off").datepicker(options);
 		}
 		else
 		{
@@ -755,7 +755,9 @@ FlexForms.modules.Extras_TableDnD_DefaultDrop = function(table, row) {
 				}
 ?>
 
-		jQuery('#<?php echo FlexForms::JSSafe($idbase); ?>').tableDnD(options);
+		jQuery('#<?php echo FlexForms::JSSafe($idbase); ?>').on('table:datachanged', function() {
+			jQuery(this).tableDnDUpdate();
+		}).tableDnD(options);
 	}
 	else
 	{
