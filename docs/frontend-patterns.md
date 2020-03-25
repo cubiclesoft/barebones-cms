@@ -200,7 +200,7 @@ Create an 'index.php' file in the same directory as the 'config.php' file:
 	// Calculate the tag to retrieve based on the current URL.
 	$tag = Request::GetURLBase();
 	if (strncasecmp($tag, $config["tag_base_path"], strlen($config["tag_base_path"])) == 0)  $tag = substr($tag, strlen($config["tag_base_path"]));
-	if ($tag === "" || $tag{0} !== "/")  $tag = "/" . $tag;
+	if ($tag === "" || $tag[0] !== "/")  $tag = "/" . $tag;
 
 	// Redirect when there is no trailing slash for SEO purposes.
 	if (substr($tag, -1) !== "/")
@@ -492,7 +492,7 @@ Example news pattern usage:
 	// Calculate the tag to retrieve based on the current URL.
 	$tag = Request::GetURLBase();
 	if (strncasecmp($tag, $config["tag_base_path"], strlen($config["tag_base_path"])) == 0)  $tag = substr($tag, strlen($config["tag_base_path"]));
-	if ($tag === "" || $tag{0} !== "/")  $tag = "/" . $tag;
+	if ($tag === "" || $tag[0] !== "/")  $tag = "/" . $tag;
 
 	if ($config["tag_base_prefix"] !== "")  $tag = $config["tag_base_prefix"] . $tag;
 
@@ -606,7 +606,7 @@ Example news pattern usage:
 				// Rebuild all associated sections.
 				foreach ($asset["tags"] as $tag2)
 				{
-					if ($tag2{0} !== "/")  continue;
+					if ($tag2[0] !== "/")  continue;
 
 					while (!isset($processed[$tag2]))
 					{

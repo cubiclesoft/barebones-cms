@@ -81,7 +81,7 @@
 		$result = $sy - $uy;
 		for ($ux = 0; $ux < $uy; $ux++)
 		{
-			$result |= ord($userinput{$ux}) ^ ord($secret{$sx});
+			$result |= ord($userinput[$ux]) ^ ord($secret[$sx]);
 			$sx = ($sx + 1) % $sy;
 		}
 
@@ -1096,8 +1096,8 @@
 					$y = strlen($word);
 					for ($x = 0; $x < $y; $x++)
 					{
-						if (ord($word{$x}) > 126)  $word2 .= bin2hex($word{$x});
-						else  $word2 .= $word{$x};
+						if (ord($word[$x]) > 126)  $word2 .= bin2hex($word[$x]);
+						else  $word2 .= $word[$x];
 					}
 					$word = "-" . BB_SanitizeStr($word2);
 
@@ -1260,7 +1260,7 @@
 			$y = strlen($filename2);
 			for ($x = 0; $x < $y; $x++)
 			{
-				$filename .= (ord($filename2{$x}) >= 0x80 ? "~" . bin2hex($filename2{$x}) : $filename2{$x});
+				$filename .= (ord($filename2[$x]) >= 0x80 ? "~" . bin2hex($filename2[$x]) : $filename2[$x]);
 			}
 
 			try

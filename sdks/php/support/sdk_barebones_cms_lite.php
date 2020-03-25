@@ -1,6 +1,6 @@
 <?php
 	// The official PHP SDK for lightweight Barebones CMS frontends.
-	// (C) 2018 CubicleSoft.  All Rights Reserved.
+	// (C) 2020 CubicleSoft.  All Rights Reserved.
 
 	class BarebonesCMSLite
 	{
@@ -393,7 +393,7 @@
 			if (strpos($url, ":") !== false)  return $url;
 
 			// Handle relative paths.
-			if ($url === "" || $url{0} !== "/")  return rtrim(self::GetFullURLBase($protocol), "/") . "/" . $url;
+			if ($url === "" || $url[0] !== "/")  return rtrim(self::GetFullURLBase($protocol), "/") . "/" . $url;
 
 			// Handle '/path/'.
 			$host = self::GetHost($protocol);
