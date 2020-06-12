@@ -1,6 +1,6 @@
 <?php
 	// Barebones CMS API support functions.
-	// (C) 2018 CubicleSoft.  All Rights Reserved.
+	// (C) 2020 CubicleSoft.  All Rights Reserved.
 
 	function BB_GetSupportedDatabases()
 	{
@@ -565,7 +565,12 @@
 			$sql["GROUP BY"] = "tag";
 
 			if (isset($data["order"]) && $data["order"] === "tag")  $sql["ORDER BY"] = "tag";
-			else if (isset($data["order"]) && $data["order"] === "publish")  $sql["ORDER BY"] = "publish DESC";
+			else if (isset($data["order"]) && $data["order"] === "publish")
+			{
+				$sql["GROUP BY"] .= ", publish";
+
+				$sql["ORDER BY"] = "publish DESC";
+			}
 			else  $sql["ORDER BY"] = "numtags DESC";
 
 			if (isset($data["limit"]) && is_numeric($data["limit"]))
