@@ -715,8 +715,8 @@ setInterval(function() {
 
 		if ((double)phpversion() < 5.6)  $errors["phpversion"] = "The server is running PHP " . phpversion() . ".  The installation may succeed but the API will not function.  Running outdated versions of PHP poses a serious website security risk.  Please contact your system administrator to upgrade your PHP installation.";
 
-		if (file_put_contents("test.dat", "a") === false)  $errors["createfiles"] = "Unable to create 'test.dat'.  Running chmod 777 on the directory may fix the problem.";
-		else if (!unlink("test.dat"))  $errors["createfiles"] = "Unable to delete 'test.dat'.  Running chmod 777 on the directory may fix the problem.";
+		if (file_put_contents("test.dat", "a") === false)  $errors["createfiles"] = "Unable to create 'test.dat'.  Temporarily running chmod 777 on the directory may fix the problem.  You can change permissions back after installation.";
+		else if (!unlink("test.dat"))  $errors["createfiles"] = "Unable to delete 'test.dat'.  Temporarily running chmod 777 on the directory may fix the problem.  You can change permissions back after installation.";
 
 		if (!isset($_SERVER["REQUEST_URI"]))  $errors["requesturi"] = "The server does not appear to support this feature.  The installation may fail and the site might not work.";
 

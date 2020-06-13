@@ -134,6 +134,8 @@ Example static page pattern usage:
 * Content for a Contact Us form.
 * Privacy Policy, Terms of Service, or other legal forms and verbiage.
 
+This pattern assumes matching Tags have starting and trailing slashes (e.g. `/gardening/fun/`, `/`).
+
 First, create a 'config.php' file at the location for the static page(s):
 
 ```php
@@ -478,6 +480,8 @@ Example news pattern usage:
 * News articles.
 * Announcements.
 * A corporate or personal blog for posting updates.
+
+This pattern assumes matching Tags have starting and trailing slashes for the section (e.g. `/gardening/fun/`).
 
 ```php
 <?php
