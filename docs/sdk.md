@@ -679,8 +679,8 @@ Returns:  A string containing a new filename.
 
 This static function calculates a filename to use for caching a cropped and resized image to a local file cache.
 
-BarebonesCMS::GetDestCropAndSize(&$cropx, &$cropy, &$cropw, &$croph, &$destwidth, &$destheight, $srcwidth, $srcheight, $crop, $maxwidth)
-----------------------------------------------------------------------------------------------------------------------------------------
+BarebonesCMS::GetDestCropAndSize(&$cropx, &$cropy, &$cropw, &$croph, &$destwidth, &$destheight, $srcwidth, $srcheight, $crop, $maxwidth, $maxheight)
+----------------------------------------------------------------------------------------------------------------------------------------------------
 
 Access:  public static
 
@@ -696,13 +696,14 @@ Parameters:
 * $srcheight - An integer containing the source image height.
 * $crop - A comma-separated string containing a crop rectangle.
 * $maxwidth - An integer containing the maximum image width of the final image.
+* $maxheight - An integer containing the maximum image height of the final image.
 
 Returns:  Nothing.
 
 This static function performs calculations of the final image width and cropping region based on input image width and height, cropping region, and maximum width.
 
-BarebonesCMS::CropAndScaleImage($data, $crop, $maxwidth)
---------------------------------------------------------
+BarebonesCMS::CropAndScaleImage($data, $crop, $maxwidth = false, $maxheight = false)
+------------------------------------------------------------------------------------
 
 Access:  public static
 
@@ -710,7 +711,8 @@ Parameters:
 
 * $data - A string containing an image to crop and scale.
 * $crop - A comma-separated string containing a crop rectangle.
-* $maxwidth - An integer containing the maximum image width of the final image.
+* $maxwidth - An integer containing the maximum image width of the final image (Default is false).
+* $maxheight - An integer containing the maximum image height of the final image (Default is false).
 
 Returns:  A standard array of information.
 

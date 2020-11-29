@@ -1298,11 +1298,11 @@ $(function() {
 			// Load Cropper JS.
 			FlexForms.LoadCSS('modules-imagecrop', 'support/cropperjs/cropper.css');
 
-			FlexForms.jsqueue['modules-imagecrop'] = { 'mode': 'src', 'dependency': false, 'loading': false, 'src': 'support/cropperjs/cropper.min.js', 'detect': 'Cropper' };
+			FlexForms.AddJSQueueItem('modules-imagecrop', { 'mode': 'src', 'dependency': false, 'loading': false, 'src': 'support/cropperjs/cropper.min.js', 'detect': 'Cropper' });
 
 			var instancenum = ContentTools.CROP_IMAGE.instancenum;
 
-			FlexForms.jsqueue['modules-imagecrop-barebones-cms|' + instancenum] = {
+			FlexForms.AddJSQueueItem('modules-imagecrop-barebones-cms|' + instancenum, {
 				'mode': 'inline',
 				'dependency': 'modules-imagecrop',
 				'loading': false,
@@ -1322,11 +1322,11 @@ $(function() {
 					if (runinfo.info.cropselected)  runinfo.dialog.selectCropRatio.call(runinfo.dialog, runinfo.info.cropselected);
 					else  runinfo.dialog.selectCropRatio.call(runinfo.dialog, '<?php echo BB_JSSafe($config["default_crop_ratio"]); ?>');
 				}
-			};
+			});
 
 			ContentTools.CROP_IMAGE.instancenum++;
 
-			FlexForms.ProcessJSQueue.call(FlexForms);
+			FlexForms.ProcessJSQueue();
 		},
 
 		ratio: function(newratio, cropinfo) {
@@ -1637,12 +1637,12 @@ $(function() {
 
 			FlexForms.LoadCSS('modules-fileuploader', 'support/fancy-file-uploader/fancy_fileupload.css');
 
-			FlexForms.jsqueue['modules-fileuploader-base'] = { 'mode': 'src', 'dependency': 'jqueryui', 'loading': false, 'src': 'support/fancy-file-uploader/jquery.fileupload.js', 'detect': 'jQuery.fn.fileupload' };
-			FlexForms.jsqueue['modules-fileuploader-iframe'] = { 'mode': 'src', 'dependency': 'modules-fileuploader-base', 'loading': false, 'src': 'support/fancy-file-uploader/jquery.iframe-transport.js', 'detect': 'jQuery.fn.FancyFileUpload' };
-			FlexForms.jsqueue['modules-fileuploader-fancy'] = { 'mode': 'src', 'dependency': 'modules-fileuploader-iframe', 'loading': false, 'src': 'support/fancy-file-uploader/jquery.fancy-fileupload.js', 'detect': 'jQuery.fn.FancyFileUpload' };
+			FlexForms.AddJSQueueItem('modules-fileuploader-base', { 'mode': 'src', 'dependency': 'jqueryui', 'loading': false, 'src': 'support/fancy-file-uploader/jquery.fileupload.js', 'detect': 'jQuery.fn.fileupload' });
+			FlexForms.AddJSQueueItem('modules-fileuploader-iframe', { 'mode': 'src', 'dependency': 'modules-fileuploader-base', 'loading': false, 'src': 'support/fancy-file-uploader/jquery.iframe-transport.js', 'detect': 'jQuery.fn.FancyFileUpload' });
+			FlexForms.AddJSQueueItem('modules-fileuploader-fancy', { 'mode': 'src', 'dependency': 'modules-fileuploader-iframe', 'loading': false, 'src': 'support/fancy-file-uploader/jquery.fancy-fileupload.js', 'detect': 'jQuery.fn.FancyFileUpload' });
 
 			var instancenum = ContentTools.INSERT_FILE_UPLOADER.instancenum;
-			FlexForms.jsqueue['modules-fileuploader-barebones-cms|' + instancenum] = {
+			FlexForms.AddJSQueueItem('modules-fileuploader-barebones-cms|' + instancenum, {
 				'mode': 'inline',
 				'dependency': 'modules-fileuploader-fancy',
 				'loading': false,
@@ -1891,11 +1891,11 @@ $(function() {
 
 					inputfile.FancyFileUpload(options);
 				}
-			};
+			});
 
 			ContentTools.INSERT_FILE_UPLOADER.instancenum++;
 
-			FlexForms.ProcessJSQueue.call(FlexForms);
+			FlexForms.ProcessJSQueue();
 		}
 	};
 <?php

@@ -3,6 +3,8 @@ Barebones CMS Documentation
 
 This directory contains the release distribution documentation for Barebones CMS.
 
+[![Donate](https://cubiclesoft.com/res/donate-shield.png)](https://cubiclesoft.com/donate/) [![Discord](https://img.shields.io/discord/777282089980526602?label=chat&logo=discord)](https://cubiclesoft.com/product-support/github/)
+
 Features
 --------
 

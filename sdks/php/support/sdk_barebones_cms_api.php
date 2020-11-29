@@ -556,7 +556,7 @@
 			return $result;
 		}
 
-		public static function GetDestCropAndSize(&$cropx, &$cropy, &$cropw, &$croph, &$destwidth, &$destheight, $srcwidth, $srcheight, $crop, $maxwidth)
+		public static function GetDestCropAndSize(&$cropx, &$cropy, &$cropw, &$croph, &$destwidth, &$destheight, $srcwidth, $srcheight, $crop, $maxwidth, $maxheight)
 		{
 			$cropx = 0;
 			$cropy = 0;
@@ -613,9 +613,15 @@
 				$destwidth = $maxwidth;
 				$destheight = (int)($croph * $destwidth / $cropw);
 			}
+
+			if ($destheight > $maxheight)
+			{
+				$destwidth = (int)($destwidth * $maxheight / $destheight);
+				$destheight = $maxheight;
+			}
 		}
 
-		public static function CropAndScaleImage($data, $crop, $maxwidth)
+		public static function CropAndScaleImage($data, $crop = "", $maxwidth = false, $maxheight = false)
 		{
 			@ini_set("memory_limit", "512M");
 
@@ -631,10 +637,13 @@
 					$srcwidth = $info["width"];
 					$srcheight = $info["height"];
 
+					if ($maxwidth === false)  $maxwidth = $srcwidth;
+					if ($maxheight === false)  $maxheight = $srcheight;
+
 					if ($srcwidth <= $maxwidth && $crop === "")  return array("success" => true, "data" => $data);
 
 					// Calculate various points.
-					self::GetDestCropAndSize($cropx, $cropy, $cropw, $croph, $destwidth, $destheight, $srcwidth, $srcheight, $crop, $maxwidth);
+					self::GetDestCropAndSize($cropx, $cropy, $cropw, $croph, $destwidth, $destheight, $srcwidth, $srcheight, $crop, $maxwidth, $maxheight);
 				}
 				catch (Exception $e)
 				{
@@ -677,10 +686,14 @@
 				$type = $info[2];
 
 				if ($type !== IMAGETYPE_JPEG && $type !== IMAGETYPE_PNG && $type !== IMAGETYPE_GIF)  return array("success" => false, "error" => self::CMS_Translate("Unsupported image format."), "errorcode" => "unsupported_image_format");
+
+				if ($maxwidth === false)  $maxwidth = $srcwidth;
+				if ($maxheight === false)  $maxheight = $srcheight;
+
 				if ($srcwidth <= $maxwidth && $crop === "")  return array("success" => true, "data" => $data);
 
 				// Calculate various points.
-				self::GetDestCropAndSize($cropx, $cropy, $cropw, $croph, $destwidth, $destheight, $srcwidth, $srcheight, $crop, $maxwidth);
+				self::GetDestCropAndSize($cropx, $cropy, $cropw, $croph, $destwidth, $destheight, $srcwidth, $srcheight, $crop, $maxwidth, $maxheight);
 
 				$img = @imagecreatefromstring($data);
 				if ($img === false)  return array("success" => false, "error" => self::CMS_Translate("Unable to load image."), "errorcode" => "image_load_failed");

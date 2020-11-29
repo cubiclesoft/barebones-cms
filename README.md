@@ -7,7 +7,7 @@ Barebones CMS pushes the limits of content management and solves many of today's
 
 [![Screenshot of the Barebones CMS administrative interface](docs/images/admin_interface_screenshot.png?raw=true "Barebones CMS administrative interface")](http://barebonescms.com/demo/)
 
-[![Donate](https://cubiclesoft.com/res/donate-shield.png)](https://cubiclesoft.com/donate/)
+[![Donate](https://cubiclesoft.com/res/donate-shield.png)](https://cubiclesoft.com/donate/) [![Discord](https://img.shields.io/discord/777282089980526602?label=chat&logo=discord)](https://cubiclesoft.com/product-support/github/)
 
 Features
 --------
