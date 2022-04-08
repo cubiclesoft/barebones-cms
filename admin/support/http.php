@@ -1,11 +1,11 @@
 <?php
 	// CubicleSoft PHP HTTP class.
-	// (C) 2018 CubicleSoft.  All Rights Reserved.
+	// (C) 2021 CubicleSoft.  All Rights Reserved.
 
 	class HTTP
 	{
-		// RFC 3986 delimeter splitting implementation.
-		public static function ExtractURL($url)
+		// RFC 3986 delimeter splitting implementation with IDNA/Punycode support.
+		public static function ExtractURL($url, $idnahost = true)
 		{
 			$result = array(
 				"scheme" => "",
@@ -116,6 +116,25 @@
 					}
 
 					$result["host"] = $url;
+
+					// Handle conversion to Punycode for IDNs.
+					if ($idnahost)
+					{
+						$y = strlen($result["host"]);
+						for ($x = 0; $x < $y && ord($result["host"][$x]) <= 0x7F; $x++);
+
+						if ($x < $y)
+						{
+							if (!class_exists("UTFUtils", false))  require_once str_replace("\\", "/", dirname(__FILE__)) . "/utf_utils.php";
+
+							$host = UTFUtils::ConvertToPunycode($result["host"]);
+							if ($host !== false)
+							{
+								$result["orighost"] = $result["host"];
+								$result["host"] = $host;
+							}
+						}
+					}
 				}
 			}
 
@@ -875,6 +894,7 @@
 
 							if ($result === false)  return self::CleanupErrorState($state, array("success" => false, "error" => self::HTTPTranslate("A stream_socket_enable_crypto() failure occurred.  Most likely cause:  Connection failure or incompatible crypto setup."), "errorcode" => "stream_socket_enable_crypto_failed"));
 							else if ($result === true)  $state["state"] = "connection_ready";
+							else  return array("success" => false, "error" => self::HTTPTranslate("Non-blocking enable crypto operation is not complete yet."), "errorcode" => "no_data");
 
 							if (isset($state["options"]["debug_callback"]) && is_callable($state["options"]["debug_callback"]))  call_user_func_array($state["options"]["debug_callback"], array("nextstate", $state["state"], &$state["options"]["debug_callback_opts"]));
 
@@ -1622,6 +1642,11 @@
 			if ($useproxy && !$proxyconnect && $proxyusername != "")  $data .= "Proxy-Authorization: BASIC " . base64_encode($proxyusername . ":" . $proxypassword) . "\r\n";
 			if ($username != "")  $data .= "Authorization: BASIC " . base64_encode($username . ":" . $password) . "\r\n";
 			$ver = explode(".", $options["httpver"]);
+			if (isset($options["headers"]["Host"]))
+			{
+				$url2 = self::ExtractURL("http://" . $options["headers"]["Host"]);
+				$options["headers"]["Host"] = $url2["host"] . (isset($url2["port"]) && $url2["port"] != "" ? ":" . $url2["port"] : "");
+			}
 			if ((int)$ver[0] > 1 || ((int)$ver[0] == 1 && (int)$ver[1] >= 1))
 			{
 				if (!isset($options["headers"]["Host"]))  $options["headers"]["Host"] = $host . ($defaultport ? "" : ":" . $port);
@@ -1823,7 +1848,12 @@
 					if (isset($options["source_ip"]))  $context["socket"] = array("bindto" => $options["source_ip"] . ":0");
 					if ($secure)
 					{
-						if (!isset($options["sslopts"]) || !is_array($options["sslopts"]))  $options["sslopts"] = self::GetSafeSSLOpts();
+						if (!isset($options["sslopts"]) || !is_array($options["sslopts"]))
+						{
+							$options["sslopts"] = self::GetSafeSSLOpts();
+							$options["sslopts"]["auto_peer_name"] = true;
+						}
+
 						self::ProcessSSLOptions($options, "sslopts", $host);
 						foreach ($options["sslopts"] as $key => $val)  @stream_context_set_option($context, "ssl", $key, $val);
 					}
